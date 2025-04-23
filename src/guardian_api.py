@@ -11,3 +11,5 @@ def fetch_articles(search_term, date_from=None):
             "content_preview": "This is a stub preview of the article content."
         }
     ]
+
+# TODO: update the above code to implement actual function to use guardian api  
