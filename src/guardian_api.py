@@ -1,15 +1,36 @@
-# guardian_api.py
+import os
+import requests
+from typing import List, Dict, Optional
 
-def fetch_articles(search_term, date_from=None):
-    print(f"[Stub] Fetching articles for '{search_term}' from date: {date_from}")
-    # Return dummy data
-    return [
-        {
-            "webPublicationDate": "2023-11-21T11:11:31Z",
-            "webTitle": f"Stubbed Article for {search_term}",
-            "webUrl": "https://www.theguardian.com/stubbed-article",
-            "content_preview": "This is a stub preview of the article content."
-        }
-    ]
+GUARDIAN_API_URL = "https://content.guardianapis.com/search"
 
-# TODO: update the above code to implement actual function to use guardian api  
+def fetch_articles(search_term: str, date_from: Optional[str] = None) -> List[Dict[str, str]]:
+    api_key = os.getenv("GUARDIAN_API_KEY")
+    if not api_key:
+        raise EnvironmentError("GUARDIAN_API_KEY not found in environment variables")
+
+    params = {
+        "q": search_term,
+        "api-key": api_key,
+        "order-by": "newest",
+        "page-size": 10,
+    }
+
+    if date_from:
+        params["from-date"] = date_from
+
+    response = requests.get(GUARDIAN_API_URL, params=params)
+    response.raise_for_status()
+
+    data = response.json()
+    results = data.get("response", {}).get("results", [])
+
+    articles = []
+    for item in results:
+        articles.append({
+            "webPublicationDate": item.get("webPublicationDate"),
+            "webTitle": item.get("webTitle"),
+            "webUrl": item.get("webUrl"),
+        })
+
+    return articles
