@@ -12,3 +12,4 @@ temp/
 **/*pycache
 *coverage*
 venv/
+src/__pycache__/
