@@ -1,6 +1,12 @@
-# sqs_publisher.py
+# src/sqs_publisher.py
 
-def publish_articles(articles, queue_url):
-    print(f"[Stub] Publishing {len(articles)} articles to queue: {queue_url}")
-    for article in articles:
-        print(f" -> {article['webTitle']}")
+import boto3
+import json
+
+def publish_to_sqs(queue_url, message_body):
+    sqs = boto3.client("sqs")
+    response = sqs.send_message(
+        QueueUrl=queue_url,
+        MessageBody=json.dumps(message_body)
+    )
+    return response
