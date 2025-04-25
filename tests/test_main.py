@@ -3,10 +3,10 @@ import pytest
 from src.main import main as cli_main
 
 def test_main_success(capfd):
-    cli_main(["machine learning", "--queue_url", "https://example.com/queue"])
+    cli_main(["machine learning"])
     out, err = capfd.readouterr()
     assert "machine learning" in out
-    assert "https://example.com/queue" in out
+    assert "Successfully published" in out or "No articles found" in out
 
 def test_main_invalid_args():
     with pytest.raises(SystemExit):
