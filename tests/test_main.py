@@ -10,4 +10,4 @@ def test_main_success(capfd):
 
 def test_main_invalid_args():
     with pytest.raises(SystemExit):
-        cli_main(["--queue_url", "https://example.com/queue"])  # Missing search term
+        cli_main(["--queue_url", "https://example.com/queue"])
