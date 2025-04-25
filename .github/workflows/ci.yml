@@ -10,6 +10,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    env:
+      PYTHONPATH: src
+
     steps:
       - name: ⬇️ Checkout code
         uses: actions/checkout@v3
@@ -39,4 +42,4 @@ jobs:
 
       - name: 🧪 Run unit tests with pytest
         run: |
-          PYTHONPATH=src pytest tests/
+          pytest tests/
