@@ -1,13 +1,18 @@
-# tests/test_main.py
 import pytest
 from src.main import main as cli_main
+from unittest.mock import patch
 
-def test_main_success(capfd):
-    cli_main(["machine learning", "--queue_url", "https://example.com/queue"])
+@patch("src.main.publish_messages", return_value={"MessageId": "12345"})
+@patch("src.main.fetch_articles", return_value=[{"webTitle": "Test Article", "webUrl": "https://example.com"}])
+def test_main_success(mock_fetch_articles, mock_publish_messages, capfd):
+    cli_main(["machine learning"])
+
     out, err = capfd.readouterr()
-    assert "machine learning" in out
-    assert "https://example.com/queue" in out
+
+    assert "✅ Published: Test Article (Message ID: 12345)" in out
+    assert "🎉 Done! Published 1 articles to SQS." in out
+
 
 def test_main_invalid_args():
     with pytest.raises(SystemExit):
-        cli_main(["--queue_url", "https://example.com/queue"])  # Missing search term
+        cli_main(["dummy arg1", "dummy arg2"])
