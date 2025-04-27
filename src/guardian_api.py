@@ -52,7 +52,7 @@ def fetch_article_details(
     # Fetch full article details using the article's unique ID
     url = f"https://content.guardianapis.com/{article_id}"
     params["show-fields"] = "body"
-    response = requests.get(url, params=params)
+    response = requests.get(url, params=params, timeout=10)
 
     if response.status_code != 200:
         raise Exception(
