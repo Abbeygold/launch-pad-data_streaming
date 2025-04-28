@@ -21,7 +21,7 @@ def get_sqs_client():
 
 def publish_messages(messages):
     try:
-        sqs = boto3.client("sqs")
+        sqs = get_sqs_client()
         response = sqs.send_message(
             QueueUrl=SQS_QUEUE_URL, MessageBody=json.dumps(messages)
         )
@@ -29,4 +29,4 @@ def publish_messages(messages):
         return response
     except ClientError as e:
         logging.error(f"Error sending message to SQS: {str(e)}")
-        return None  # Return None to indicate failure
+        return None
