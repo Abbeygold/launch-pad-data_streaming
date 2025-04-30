@@ -2,18 +2,21 @@
 #
 # Makefile to build the project
 #
-#################################################################################
+##################################################################################
 
-.PHONY: install venv lint format security test clean
+.PHONY: install install-dev venv lint format security test clean
 
-# Create a virtual environment if not exists
+# Create a virtual environment if it does not exist
 venv:
 	@test -d venv || python3 -m venv venv
 	@echo "✅ Virtual environment ready."
 
-# Install dependencies inside venv
+# Install production and development dependencies inside venv
 install: venv
-	. venv/bin/activate && pip install -r requirements.txt && pip install -r requirements-dev.txt
+	. venv/bin/activate && pip install --upgrade pip && pip install -r requirements.txt -r requirements-dev.txt
+	@echo "✅ Dependencies installed."
+
+install-dev: install
 
 # Lint the project using flake8
 lint:
