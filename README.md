@@ -24,6 +24,7 @@ cd launch-pad-data_streaming
 ```bash
 python3 -m venv venv
 source venv/bin/activate
+export PYTHONPATH=$(pwd)
 ```
 
 ### 3. Install Dependencies
