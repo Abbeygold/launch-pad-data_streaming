@@ -27,17 +27,21 @@ def run(search_term: str, date_from: str = None):
     for article in articles:
         try:
             response = publish_messages(article)
-            results.append({
-                "title": article["webTitle"],
-                "message_id": response.get("MessageId") if response else None,
-                "error": None if response else "SQS Error",
-            })
+            results.append(
+                {
+                    "title": article["webTitle"],
+                    "message_id": response.get("MessageId") if response else None,
+                    "error": None if response else "SQS Error",
+                }
+            )
         except Exception as e:
-            results.append({
-                "title": article["webTitle"],
-                "message_id": None,
-                "error": str(e),
-            })
+            results.append(
+                {
+                    "title": article["webTitle"],
+                    "message_id": None,
+                    "error": str(e),
+                }
+            )
     return results
 
 

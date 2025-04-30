@@ -14,9 +14,9 @@ from src.aws_config import (
 boto_config = Config(
     region_name=AWS_REGION,
     retries={
-        'max_attempts': 5,
-        'mode': 'standard',
-    }
+        "max_attempts": 5,
+        "mode": "standard",
+    },
 )
 
 # Create the SQS client once (global reuse)
