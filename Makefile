@@ -21,7 +21,7 @@ security:
 
 # Run tests with pytest
 test:
-	pytest --maxfail=1 --disable-warnings -q
+	PYTHONPATH=. pytest --maxfail=1 --disable-warnings -q
 
 # Clean up .pyc files and other temporary files
 clean:
