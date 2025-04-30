@@ -19,6 +19,7 @@ boto_config = Config(
     },
 )
 
+
 def get_sqs_client():
     return boto3.client(
         "sqs",
@@ -27,6 +28,7 @@ def get_sqs_client():
         aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
         config=boto_config,
     )
+
 
 def publish_messages(messages):
     sqs_client = get_sqs_client()  # Lazy instantiation inside function scope
