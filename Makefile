@@ -1,31 +1,36 @@
-# Makefile
+##################################################################################
+#
+# Makefile to build the project
+#
+#################################################################################
 
-.PHONY: install-dev lint format security test clean all
+.PHONY: install venv lint format security test clean
 
-# Install all dependencies including dev tools
-install-dev:
-	pip install -r requirements.txt
-	pip install -r requirements-dev.txt
+# Create a virtual environment if not exists
+venv:
+	@test -d venv || python3 -m venv venv
+	@echo "✅ Virtual environment ready."
+
+# Install dependencies inside venv
+install: venv
+	. venv/bin/activate && pip install -r requirements.txt && pip install -r requirements-dev.txt
 
 # Lint the project using flake8
 lint:
-	flake8 src tests --max-line-length=88
+	. venv/bin/activate && flake8 src tests --max-line-length=88
 
 # Format the code using black
 format:
-	black src tests
+	. venv/bin/activate && black src tests
 
 # Run security checks using bandit
 security:
-	bandit -r src
+	. venv/bin/activate && bandit -r src
 
 # Run tests with pytest
 test:
-	PYTHONPATH=. pytest --maxfail=1 --disable-warnings -q
+	. venv/bin/activate && pytest --maxfail=1 --disable-warnings -q
 
 # Clean up .pyc files and other temporary files
 clean:
-	find . -type f -name "*.pyc" -delete
-
-# Run all checks (formatting skipped to avoid auto changes)
-all: lint security test
+	find . -name "*.pyc" -exec rm -f {} \;
