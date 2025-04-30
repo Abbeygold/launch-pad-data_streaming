@@ -7,10 +7,8 @@ from src import sqs_publisher
 
 @pytest.fixture
 def mock_sqs_client():
-    with patch("src.sqs_publisher.get_sqs_client") as mock_get_client:
-        mock_client_instance = Mock()
-        mock_get_client.return_value = mock_client_instance
-        yield mock_client_instance 
+    with patch("src.sqs_publisher.sqs_client") as mock_client:
+        yield mock_client
 
 def test_publish_messages_success(mock_sqs_client):
     # Arrange
