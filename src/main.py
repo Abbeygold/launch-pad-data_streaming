@@ -1,7 +1,7 @@
 import argparse
+import logging
 from src.guardian_api import fetch_articles
 from src.sqs_publisher import publish_messages
-import logging
 
 logging.basicConfig(level=logging.INFO)
 
@@ -20,25 +20,43 @@ def parse_args(args=None):
     return parser.parse_args(args)
 
 
-def main(args=None):
-    args = parse_args(args)
-
-    articles = fetch_articles(args.search_term, args.date_from)
+def run(search_term: str, date_from: str = None):
+    articles = fetch_articles(search_term, date_from)
+    results = []
 
     for article in articles:
         try:
             response = publish_messages(article)
-            if response:
-                print(
-                    f"✅ Published: {article['webTitle']} "
-                    f"(Message ID: {response['MessageId']})"
-                )
-            else:
-                print(f"❌ Failed to publish: {article['webTitle']} — SQS error")
+            results.append(
+                {
+                    "title": article["webTitle"],
+                    "message_id": response.get("MessageId") if response else None,
+                    "error": None if response else "SQS Error",
+                }
+            )
         except Exception as e:
-            print(f"❌ Failed to publish: {article['webTitle']} — {str(e)}")
+            results.append(
+                {
+                    "title": article["webTitle"],
+                    "message_id": None,
+                    "error": str(e),
+                }
+            )
+    return results
 
-    print(f"\n🎉 Done! Published {len(articles)} articles to SQS.")
+
+def main(args=None):
+    args = parse_args(args)
+    results = run(args.search_term, args.date_from)
+
+    for result in results:
+        title = result["title"]
+        if result["message_id"]:
+            print(f"✅ Published: {title} (Message ID: {result['message_id']})")
+        else:
+            print(f"❌ Failed to publish: {title} — {result['error']}")
+
+    print(f"\n🎉 Done! Published {len(results)} articles to SQS.")
 
 
 if __name__ == "__main__":
