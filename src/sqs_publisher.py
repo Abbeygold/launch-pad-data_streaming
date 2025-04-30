@@ -28,6 +28,7 @@ sqs_client = boto3.client(
     config=boto_config,
 )
 
+
 def publish_messages(messages):
     try:
         response = sqs_client.send_message(

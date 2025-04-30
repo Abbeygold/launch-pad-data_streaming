@@ -5,6 +5,7 @@ from src.sqs_publisher import publish_messages
 
 logging.basicConfig(level=logging.INFO)
 
+
 def parse_args(args=None):
     parser = argparse.ArgumentParser(
         description="Search Guardian articles and publish to an AWS SQS queue."
@@ -50,7 +51,7 @@ def main(args=None):
             print(f"✅ Published: {title} (Message ID: {result['message_id']})")
         else:
             print(f"❌ Failed to publish: {title} — {result['error']}")
-    
+
     print(f"\n🎉 Done! Published {len(results)} articles to SQS.")
 
 
