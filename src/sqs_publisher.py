@@ -19,17 +19,18 @@ boto_config = Config(
     },
 )
 
-# Create the SQS client once (global reuse)
-sqs_client = boto3.client(
-    "sqs",
-    region_name=AWS_REGION,
-    aws_access_key_id=AWS_ACCESS_KEY_ID,
-    aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
-    config=boto_config,
-)
-
+def get_sqs_client():
+    return boto3.client(
+        "sqs",
+        region_name=AWS_REGION,
+        aws_access_key_id=AWS_ACCESS_KEY_ID,
+        aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+        config=boto_config,
+    )
 
 def publish_messages(messages):
+    sqs_client = get_sqs_client()  # Lazy instantiation inside function scope
+
     try:
         response = sqs_client.send_message(
             QueueUrl=SQS_QUEUE_URL,
