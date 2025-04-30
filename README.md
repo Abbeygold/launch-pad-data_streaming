@@ -50,10 +50,11 @@ GUARDIAN_API_KEY=your_guardian_api_key
 ### 5. Run the Application
 
 ```bash
-python src/main.py
+python src/main.py "search term" --date_from 2023-01-01    # with an optional date from
+python src/main.py "search term" # without a date
 ```
 
-## 🧪 Testing
+## Testing
 
 To run the tests:
 
