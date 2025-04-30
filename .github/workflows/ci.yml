@@ -1,4 +1,4 @@
-name: Continuous Integration
+name: CI
 
 on:
   push:
@@ -7,39 +7,35 @@ on:
     branches: [main]
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
 
-    env:
-      PYTHONPATH: ${{ github.workspace }}
-
     steps:
-      - name: ⬇️ Checkout code
-        uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: 🐍 Set up Python
-        uses: actions/setup-python@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
           python-version: 3.11
 
-      - name: 📦 Install dependencies
+      - name: Install pip + wheel + setuptools
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install flake8 black bandit pytest
+          python -m pip install --upgrade pip setuptools wheel
 
-      - name: 🔍 Lint with flake8
-        run: |
-          flake8 src/ --max-line-length=88
+      - name: Install dependencies
+        run: make install-dev
 
-      - name: 🎨 Format check with black
-        run: |
-          black --check src/
+      - name: Run lint
+        run: make lint
 
-      - name: 🔐 Run security scan with bandit
-        run: |
-          bandit -r src/
+      - name: Run formatting check
+        run: black --check src tests
 
-      - name: 🧪 Run unit tests with pytest
-        run: |
-          pytest tests/
+      - name: Run security check
+        run: make security
+
+      - name: Run tests
+        env:
+          AWS_REGION: us-east-1 # or your mocked/test region
+        run: make test
