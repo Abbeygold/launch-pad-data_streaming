@@ -2,7 +2,7 @@ import os
 import pytest
 import requests
 from unittest.mock import patch, Mock
-from src.guardian_api import fetch_articles
+from src.guardian_api_wrapper import fetch_articles
 
 # Sample API response from Guardian
 MOCK_RESPONSE = {
@@ -18,7 +18,7 @@ MOCK_RESPONSE = {
 }
 
 
-@patch("src.guardian_api.requests.get")
+@patch("src.guardian_api_wrapper.requests.get")
 def test_fetch_articles_success(mock_get):
     os.environ["GUARDIAN_API_KEY"] = "test-key"
 
@@ -36,7 +36,7 @@ def test_fetch_articles_success(mock_get):
     )
 
 
-@patch("src.guardian_api.requests.get")
+@patch("src.guardian_api_wrapper.requests.get")
 def test_fetch_articles_with_date(mock_get):
     os.environ["GUARDIAN_API_KEY"] = "test-key"
 
@@ -52,9 +52,9 @@ def test_fetch_articles_with_date(mock_get):
     assert params["from-date"] == "2023-01-01"
 
 
-@patch("src.guardian_api.requests.get")
+@patch("src.guardian_api_wrapper.requests.get")
 def test_fetch_articles_error_response(mock_get):
-    os.environ["GUARDIAN_API_KEY"] = "test-key"
+    os.environ["guardian_api_wrapper_KEY"] = "test-key"
 
     mock_response = Mock()
     mock_response.raise_for_status.side_effect = requests.HTTPError("Bad request")
@@ -72,8 +72,8 @@ def test_fetch_articles_missing_api_key():
         fetch_articles("machine learning")
 
 
-@patch("src.guardian_api.requests.get")
-@patch("src.guardian_api.fetch_article_details")
+@patch("src.guardian_api_wrapper.requests.get")
+@patch("src.guardian_api_wrapper.fetch_article_details")
 def test_fetch_articles_with_content_preview(mock_fetch_article_details, mock_get):
     # Set the environment variable for the API key
     os.environ["GUARDIAN_API_KEY"] = "test-key"

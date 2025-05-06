@@ -87,11 +87,12 @@ make format
 .
 ├── src/
 │   ├── main.py
-│   ├── guardian_api.py
+│   ├── guardian_api_wrapper.py
 │   ├── sqs_publisher.py
 │   └── aws_config.py
 ├── tests/
-│   └── test_guardian_api.py
+│   └── test_main.py
+|   └── test_guardian_api_wrapper.py
 │   └── test_sqs_publisher.py
 ├── requirements.txt
 ├── requirements-dev.txt

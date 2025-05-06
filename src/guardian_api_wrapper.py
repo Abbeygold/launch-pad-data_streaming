@@ -2,7 +2,7 @@ import os
 import requests
 from typing import List, Dict, Optional
 
-GUARDIAN_API_URL = "https://content.guardianapis.com/search"
+guardian_api_wrapper_URL = "https://content.guardianapis.com/search"
 
 
 def fetch_articles(
@@ -22,7 +22,7 @@ def fetch_articles(
     if date_from:
         params["from-date"] = date_from
 
-    response = requests.get(GUARDIAN_API_URL, params=params, timeout=10)
+    response = requests.get(guardian_api_wrapper_URL, params=params, timeout=10)
     response.raise_for_status()
 
     data = response.json()
