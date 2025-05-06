@@ -1,6 +1,6 @@
 import argparse
 import logging
-from src.guardian_api import fetch_articles
+from src.guardian_api_wrapper import fetch_articles
 from src.sqs_publisher import publish_messages
 
 logging.basicConfig(level=logging.INFO)

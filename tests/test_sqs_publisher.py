@@ -5,7 +5,6 @@ from unittest.mock import patch, Mock
 from botocore.exceptions import ClientError
 from src import sqs_publisher
 
-
 @pytest.fixture
 def mock_boto3_client():
     with patch("src.sqs_publisher.boto3.client") as mock_boto_client:
